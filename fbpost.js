@@ -70,7 +70,7 @@
     )].sort((a,b) => a.localeCompare(b,'th'));
 
     select.innerHTML =
-      '<option value="">ทุกพื้นที่</option>' +
+      '<option value="">ทั้งหมด</option>' +
       areas.map(area => `<option value="${esc(area)}">${esc(area)}</option>`).join('');
   }
 
