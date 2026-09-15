@@ -44,7 +44,7 @@
     function backToHome(event) {
       if (event) event.preventDefault();
 
-      sessionStorage.removeItem('SSS_PROFILE_ROLLNO');
+      sessionStorage.removeItem('LP360:DISTRICT:SSS_PROFILE_ROLLNO');
 
       if (window.opener && !window.opener.closed) {
         window.close();
@@ -57,7 +57,7 @@
 
     (() => {
       const params = new URLSearchParams(window.location.search);
-      const rollno = String(params.get('rollno') || sessionStorage.getItem('SSS_PROFILE_ROLLNO') || '')
+      const rollno = String(params.get('rollno') || sessionStorage.getItem('LP360:DISTRICT:SSS_PROFILE_ROLLNO') || '')
         .replace(/\D/g, '').slice(0, 10);
       const webAppUrl = String(window.STUDENT_PROFILE_WEB_APP_URL || '').trim();
       const frame = document.getElementById('profileFrame');

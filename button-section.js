@@ -43,7 +43,7 @@ async function publicLoad(){
   return j.data||{style:'icon-text',items:[]};
 }
 async function adminApi(action,data={}){
-  const token=sessionStorage.getItem('mysiteAdminToken')||'';
+  const token=sessionStorage.getItem('LP360:DISTRICT:mysiteAdminToken')||'';
   const r=await fetch(API,{method:'POST',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({mode:'buttonsectionadmin',action,token,data})});
   const j=await r.json();
   if(!r.ok||!j.success)throw new Error(j.message||'ดำเนินการไม่สำเร็จ');
