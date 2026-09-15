@@ -83,11 +83,11 @@
       }
 
       const contact = result.contact || {};
-      const organization = String(contact.organization || '').trim();
+      const announcementMessage = String(contact.announcementText || '').trim();
 
       if (announcement) {
-        announcement.textContent = organization;
-        announcement.hidden = !organization;
+        announcement.textContent = announcementMessage;
+        announcement.hidden = !announcementMessage;
       }
 
       enableAnnouncementLink(announcement, contact.announcementUrl);
