@@ -2506,7 +2506,7 @@ function areaCard(area) {
     }
 
     if (window.SiteFast) {
-      grid.innerHTML = '<div class="lsb-loading">กำลังโหลดแหล่งเรียนรู้...</div>';
+      grid.innerHTML = '<div class="lsb-loading section-loading-with-spinner"><span class="section-loading-spinner" aria-hidden="true"></span>กำลังโหลดแหล่งเรียนรู้...</div>';
       window.SiteFast.fetchMode('learningAreas', {}, { key: 'learning-areas-v1', ttl: 300000 })
         .then(window.receiveLearningAreas)
         .catch(error => {
@@ -3229,7 +3229,7 @@ state.items = (result.activities || [])
         const delay = retryDelay(attempt);
         console.warn(`Cliproom resolver retry #${attempt}:`, error);
         if (!courses.length) {
-          track.innerHTML = `<div class="cliproom-loading">กำลังเชื่อมต่อระบบหลักสูตร...<br><small>ลองใหม่อัตโนมัติ ครั้งที่ ${attempt}</small></div>`;
+          track.innerHTML = `<div class="cliproom-loading"><span class="cliproom-spinner"></span><span>กำลังเชื่อมต่อระบบหลักสูตร...<br><small>ลองใหม่อัตโนมัติ ครั้งที่ ${attempt}</small></span></div>`;
         }
         await waitRetry(delay);
       }
@@ -3373,7 +3373,7 @@ state.items = (result.activities || [])
         const delay = retryDelay(attempt);
         console.warn(`Cliproom catalog retry #${attempt}:`, error);
         if (!courses.length) {
-          track.innerHTML = `<div class="cliproom-loading">กำลังโหลดรายการหลักสูตร...<br><small>เชื่อมต่อไม่สำเร็จ ระบบจะลองใหม่อัตโนมัติ ครั้งที่ ${attempt}</small></div>`;
+          track.innerHTML = `<div class="cliproom-loading"><span class="cliproom-spinner"></span><span>กำลังโหลดรายการหลักสูตร...<br><small>เชื่อมต่อไม่สำเร็จ ระบบจะลองใหม่อัตโนมัติ ครั้งที่ ${attempt}</small></span></div>`;
         }
         await waitRetry(delay);
       }
