@@ -333,7 +333,7 @@
       key: cacheKey,
       ttl: Number(options.ttl || 0),
       staleTtl: Number(options.staleTtl || 0),
-      forever: options.forever !== false
+      forever: options.forever === true
     });
   }
 
@@ -477,6 +477,15 @@
 function sectionProgressHtml(extraClass = '', note = '') {
   const noteHtml = note ? `<div class="lp-progress-note">${String(note).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}</div>` : '';
   return `<div class="${extraClass} lp-progress-loader" data-lp-progress data-lp-progress-start="8" role="status" aria-label="กำลังโหลดข้อมูล"><div class="lp-progress-shell"><div class="lp-progress-row"><span>Loading...</span><strong class="lp-progress-percent">8%</strong></div><progress class="lp-progress-bar" max="100" value="8">8%</progress>${noteHtml}</div></div>`;
+}
+
+function finishSectionProgress(root, render, delay = 90) {
+  const run = typeof render === 'function' ? render : () => {};
+  if (window.LP360Progress?.finishAndSwap) {
+    window.LP360Progress.finishAndSwap(root, run, delay);
+    return;
+  }
+  run();
 }
 
 function getHeroOverlayProgressState(overlay) {
@@ -868,8 +877,10 @@ function renderSettingMenus(items) {
       ).toLowerCase();
 
       if (!newsSlides.length) {
-        slider.classList.add('is-empty');
-        slidesBox.innerHTML = '<div class="news-loading">ยังไม่มีข่าวสาร</div>';
+        finishSectionProgress(slidesBox, () => {
+          slider.classList.add('is-empty');
+          slidesBox.innerHTML = '<div class="news-loading">ยังไม่มีข่าวสาร</div>';
+        });
         return;
       }
 
@@ -884,12 +895,16 @@ function renderSettingMenus(items) {
       newsAutoStoppedByUser = false;
       newsPopupOpen = false;
 
-      renderNews();
-      startNewsAutoSlide();
+      finishSectionProgress(slidesBox, () => {
+        renderNews();
+        startNewsAutoSlide();
+      });
 
     } catch (error) {
-      slidesBox.innerHTML =
-        `<div class="news-loading">โหลดข่าวสารไม่สำเร็จ: ${escapeHtml(error.message)}</div>`;
+      finishSectionProgress(slidesBox, () => {
+        slidesBox.innerHTML =
+          `<div class="news-loading">โหลดข่าวสารไม่สำเร็จ: ${escapeHtml(error.message)}</div>`;
+      });
     }
   }
 
@@ -2196,10 +2211,12 @@ window.STUDENT_PROFILE_WEB_APP_URL =
       }
       if (result.success === false) throw new Error(result.message || 'โหลดข้อมูลไม่สำเร็จ');
       users = Array.isArray(result.users) ? result.users : [];
-      renderUsers();
+      finishSectionProgress(track, () => renderUsers());
     } catch (error) {
       console.error('โหลด User Box ไม่สำเร็จ:', error);
-      track.innerHTML = '<div class="user-box-empty">โหลดรายการ User ไม่สำเร็จ</div>';
+      finishSectionProgress(track, () => {
+        track.innerHTML = '<div class="user-box-empty">โหลดรายการ User ไม่สำเร็จ</div>';
+      });
     }
   }
 
@@ -2494,7 +2511,9 @@ function areaCard(area) {
         .then(window.receiveLearningAreas)
         .catch(error => {
           console.error('Learning Areas API:', error);
-          grid.innerHTML = '<div class="lsb-loading">ไม่สามารถเชื่อมต่อข้อมูลได้</div>';
+          finishSectionProgress(grid, () => {
+            grid.innerHTML = '<div class="lsb-loading">ไม่สามารถเชื่อมต่อข้อมูลได้</div>';
+          });
         });
       return;
     }
@@ -2733,7 +2752,7 @@ state.items = (result.activities || [])
   .sort((a,b)=>activityDateValue(b.date)-activityDateValue(a.date))
   .slice(0, 6);   // แสดงเฉพาะ 6 รายการล่าสุด
 
-    renderActivities(state.items);
+    finishSectionProgress(status, () => renderActivities(state.items));
 
   } catch (error) {
     console.error('Activity Box:', error);
@@ -2895,12 +2914,16 @@ state.items = (result.activities || [])
         throw new Error(result.message || 'โหลดข้อมูลไม่สำเร็จ');
       }
 
-      render(Array.isArray(result.items) ? result.items : []);
+      finishSectionProgress(status, () => {
+        render(Array.isArray(result.items) ? result.items : []);
+      });
     } catch (error) {
       console.error('FBpostBox:', error);
-      status.hidden = false;
-      status.textContent = 'โหลดโพสต์ Facebook ไม่สำเร็จ';
-      grid.innerHTML = '';
+      finishSectionProgress(status, () => {
+        status.hidden = false;
+        status.textContent = 'โหลดโพสต์ Facebook ไม่สำเร็จ';
+        grid.innerHTML = '';
+      });
     }
   }
 
@@ -3211,6 +3234,9 @@ state.items = (result.activities || [])
         attempt += 1;
         const delay = retryDelay(attempt);
         console.warn(`Cliproom resolver retry #${attempt}:`, error);
+        if (attempt >= 3) {
+          throw error;
+        }
         if (!courses.length) {
           track.innerHTML = sectionProgressHtml('cliproom-loading', `ลองใหม่อัตโนมัติ ครั้งที่ ${attempt}`);
         }
@@ -3314,13 +3340,17 @@ state.items = (result.activities || [])
     writeCatalogCache(payload);
     courses = payload.courses;
     if (!courses.length) {
-      track.innerHTML = '<div class="cliproom-loading">ยังไม่มีหลักสูตรที่เปิดใช้งาน</div>';
-      const dots = document.getElementById('cliproomDots');
-      if (dots) dots.innerHTML = '';
+      finishSectionProgress(track, () => {
+        track.innerHTML = '<div class="cliproom-loading">ยังไม่มีหลักสูตรที่เปิดใช้งาน</div>';
+        const dots = document.getElementById('cliproomDots');
+        if (dots) dots.innerHTML = '';
+      });
       return true;
     }
-    render();
-    restart();
+    finishSectionProgress(track, () => {
+      render();
+      restart();
+    });
     return true;
   }
 
@@ -3357,7 +3387,9 @@ state.items = (result.activities || [])
         console.warn(`Cliproom catalog retry #${attempt}:`, error);
         if (attempt >= 3) {
           if (!courses.length) {
-            track.innerHTML = '<div class="cliproom-loading">ไม่สามารถโหลดหลักสูตรได้ กรุณาลองใหม่อีกครั้ง</div>';
+            finishSectionProgress(track, () => {
+              track.innerHTML = '<div class="cliproom-loading">ไม่สามารถโหลดหลักสูตรได้ กรุณาลองใหม่อีกครั้ง</div>';
+            });
           }
           return;
         }
@@ -3389,7 +3421,7 @@ state.items = (result.activities || [])
   const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
   const openShop=()=>window.open('shopactivity.html','_blank','noopener');
   const cardsPerPage=()=>window.innerWidth<=620?1:window.innerWidth<=900?2:3;
-  async function load(){try{let json;if(window.SiteFast){json=await window.SiteFast.fetchMode('learning',{action:'getActivities'},{key:'learning-activities-v1',ttl:120000,forever:false})}else{const url=new URL(API_URL);url.searchParams.set('mode','learning');url.searchParams.set('action','getActivities');const response=await fetch(url.toString(),{cache:'default'});json=await response.json();if(!response.ok)throw new Error(`HTTP ${response.status}`)}if(json?.success===false)throw new Error(json?.message||'โหลดข้อมูลไม่สำเร็จ');items=Array.isArray(json?.data)?json.data:Array.isArray(json)?json:[];render();restart()}catch(error){track.innerHTML=`<div class="shopactivity-loading">โหลดกิจกรรมไม่สำเร็จ: ${esc(error.message)}</div>`}}
+  async function load(){try{let json;if(window.SiteFast){json=await window.SiteFast.fetchMode('learning',{action:'getActivities'},{key:'learning-activities-v1',ttl:120000,forever:false})}else{const url=new URL(API_URL);url.searchParams.set('mode','learning');url.searchParams.set('action','getActivities');const response=await fetch(url.toString(),{cache:'default'});json=await response.json();if(!response.ok)throw new Error(`HTTP ${response.status}`)}if(json?.success===false)throw new Error(json?.message||'โหลดข้อมูลไม่สำเร็จ');items=Array.isArray(json?.data)?json.data:Array.isArray(json)?json:[];finishSectionProgress(track,()=>{render();restart()})}catch(error){finishSectionProgress(track,()=>{track.innerHTML=`<div class="shopactivity-loading">โหลดกิจกรรมไม่สำเร็จ: ${esc(error.message)}</div>`})}}
   function render(){if(!items.length){track.innerHTML='<div class="shopactivity-loading">ยังไม่มีกิจกรรม</div>';return}track.innerHTML=items.map(item=>`<article class="shopactivity-card" tabindex="0" role="link" aria-label="เปิดกิจกรรม ${esc(item.title)}"><img class="shopactivity-image" src="${esc(item.image1||'')}" alt="${esc(item.title)}" loading="lazy"><div class="shopactivity-body"><h3>${esc(item.title)}</h3><div class="shopactivity-meta">Point: ${esc(item.hours||'0')} Point</div><div class="shopactivity-meta">รูปแบบ: ${esc(item.learningType||'-')}</div><div class="shopactivity-meta">วันที่: ${esc(item.activityDate||'-')}</div></div></article>`).join('');track.querySelectorAll('.shopactivity-card').forEach(card=>{card.onclick=openShop;card.onkeydown=event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openShop()}}});update(true)}
   function update(reset){const old=perPage;perPage=cardsPerPage();if(reset||old!==perPage)page=0;const count=Math.max(1,Math.ceil(items.length/perPage));page=Math.max(0,Math.min(page,count-1));const card=track.querySelector('.shopactivity-card');if(card)track.style.transform=`translateX(-${page*perPage*(card.getBoundingClientRect().width+22)}px)`;const dots=document.getElementById('shopActivityDots');dots.innerHTML=Array.from({length:count},(_,i)=>`<button class="shopactivity-dot ${i===page?'active':''}" type="button" data-page="${i}" aria-label="หน้าที่ ${i+1}"></button>`).join('');dots.querySelectorAll('[data-page]').forEach(dot=>dot.onclick=()=>{page=Number(dot.dataset.page);update(false);restart()});document.getElementById('shopActivityPrev').disabled=page===0;document.getElementById('shopActivityNext').disabled=page===count-1}
   function move(step){const count=Math.max(1,Math.ceil(items.length/perPage));page=(page+step+count)%count;update(false);restart()}function restart(){clearInterval(timer);if(items.length>perPage)timer=setInterval(()=>move(1),6000)}

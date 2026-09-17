@@ -65,7 +65,17 @@ function render(data){
   }).join('');
 }
 async function refresh(){
-  try{render(await publicLoad())}catch(err){const grid=$('buttonSectionGrid');if(grid)grid.innerHTML=`<div class="button-section-empty">${esc(err.message)}</div>`}
+  const grid=$('buttonSectionGrid');
+  try{
+    const data=await publicLoad();
+    const apply=()=>render(data);
+    if(grid&&window.LP360Progress?.finishAndSwap)window.LP360Progress.finishAndSwap(grid,apply,90);
+    else apply();
+  }catch(err){
+    const apply=()=>{if(grid)grid.innerHTML=`<div class="button-section-empty">${esc(err.message)}</div>`};
+    if(grid&&window.LP360Progress?.finishAndSwap)window.LP360Progress.finishAndSwap(grid,apply,90);
+    else apply();
+  }
 }
 function canvasBlob(canvas,type,quality){return new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(new Error('ย่อรูปไอคอนไม่สำเร็จ')),type,quality))}
 function blobDataUrl(blob){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=()=>reject(new Error('อ่านไฟล์ไอคอนไม่สำเร็จ'));r.readAsDataURL(blob)})}
