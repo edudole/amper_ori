@@ -54,7 +54,7 @@ function render(data){
   const style=normalizeStyle(data?.style);
   const items=(Array.isArray(data?.items)?data.items:[]).filter(x=>x&&x.visible!==false&&x.name&&x.url);
   if(!items.length){
-    grid.innerHTML='<div class="button-section-empty">ยังไม่มีรายการปุ่ม</div>';
+    grid.innerHTML='';
     return;
   }
   grid.innerHTML=items.map(item=>{
