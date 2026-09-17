@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+const API=window.APP_CONFIG.EXEC_URL;
 const ICON_SOURCE_MAX=100*1024*1024; // ผู้ใช้กำหนดไม่เกิน 100 MB
 const ICON_TARGET_MAX=800*1024;      // ย่อสำหรับใช้งานเว็บให้เบากว่า 100 MB มาก
 const ICON_MAX_DIMENSION=512;

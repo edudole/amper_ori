@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const MAIN_API_URL = 'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+  const MAIN_API_URL = window.APP_CONFIG.EXEC_URL;
   const EXEC_CACHE_KEY = 'LP360:DISTRICT:SITE_FAST:cliproom-exec-v3';
   const EXEC_CACHE_AGE = 10 * 60 * 1000;
   const CATALOG_CACHE_KEY = 'LP360:DISTRICT:SITE_FAST:cliproom-catalog-v3-dynamic-exec';

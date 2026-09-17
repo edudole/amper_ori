@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+const API=window.APP_CONFIG.EXEC_URL;
 const state={items:[],query:''};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 function filtered(){const q=state.query.trim().toLowerCase();if(!q)return state.items;return state.items.filter(x=>`${x.order} ${x.title} ${x.reporter} ${x.type}`.toLowerCase().includes(q));}

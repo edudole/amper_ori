@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec?mode=media';let items=[];
+const API=window.APP_CONFIG.EXEC_URL + '?mode=media';let items=[];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])),safe=v=>{const u=String(v||'').trim();return /^https?:\/\//i.test(u)?u.replace(/^http:\/\//i,'https://'):''};
 const filters=()=>({title:document.getElementById('mediaTitleFilter'),subject:document.getElementById('mediaSubjectFilter'),grade:document.getElementById('mediaGradeFilter'),mediaType:document.getElementById('mediaTypeFilter')});
 function closeDetail(){document.querySelector('.media-detail-backdrop')?.remove();document.body.classList.remove('media-modal-open')}

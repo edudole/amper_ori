@@ -1,6 +1,6 @@
 (()=>{
 'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+const API=window.APP_CONFIG.EXEC_URL;
 const TYPES=['การเรียนรู้ตลอดชีวิต','การเรียนรู้เพื่อพัฒนาตนเอง','การเรียนรู้เพื่อคุณวุฒิตามระดับ','อื่นๆ'];
 const state={items:[],posterKey:'',query:'',page:1};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));

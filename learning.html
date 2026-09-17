@@ -3,6 +3,7 @@
 <head>
   
   <meta charset="UTF-8">
+  <script src="app-config.js?v=20260917-1"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1539,7 +1540,7 @@ main > .section:first-child {
   </div>
 
   <script>
-    const APP_URL = 'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+    const APP_URL = window.APP_CONFIG.EXEC_URL;
    let appData = {
   settings: {},
   sources: [],

@@ -2,7 +2,7 @@
   'use strict';
 
   const BOSS_WEB_APP_URL =
-    'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+    window.APP_CONFIG.EXEC_URL;
   const BOSS_API_URL = BOSS_WEB_APP_URL + '?mode=boss';
 
   const text = value => String(value ?? '').trim();

@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+  const API=window.APP_CONFIG.EXEC_URL;
   const state={items:[],posterKey:'',query:'',page:1,perPage:4};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
   async function api(action,data={}){const token=sessionStorage.getItem('LP360:DISTRICT:mysiteAdminToken')||'';const response=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({mode:'facebookadmin',action,data,token})});const result=await response.json();if(!result.success)throw new Error(result.message||'ดำเนินการไม่สำเร็จ');return result.data}

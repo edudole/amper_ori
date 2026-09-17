@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec',state={items:[],posterKey:'',query:'',page:1};
+const API=window.APP_CONFIG.EXEC_URL,state={items:[],posterKey:'',query:'',page:1};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 async function api(action,data={}){const token=sessionStorage.getItem('LP360:DISTRICT:mysiteAdminToken')||'',r=await fetch(API,{method:'POST',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({mode:'bestpracticeadmin',action,data,token})}),j=await r.json();if(!r.ok||!j.success)throw new Error(j.message||'ดำเนินการไม่สำเร็จ');return j.data}
 async function load(){const [items,keyData]=await Promise.all([api('list'),api('key')]);state.items=Array.isArray(items)?items:[];state.posterKey=String(keyData?.posterKey||'').trim()}

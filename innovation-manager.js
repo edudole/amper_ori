@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec',state={items:[],posterKey:'',options:[],query:'',page:1};
+const API=window.APP_CONFIG.EXEC_URL,state={items:[],posterKey:'',options:[],query:'',page:1};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 function optionMarkup(current){const cur=String(current||'').trim(),list=[...state.options];if(cur&&!list.includes(cur))list.unshift(cur);return '<option value="">-- เลือก --</option>'+list.map(v=>`<option value="${esc(v)}" ${v===cur?'selected':''}>${esc(v)}</option>`).join('')}
 async function api(action,data={}){const token=sessionStorage.getItem('LP360:DISTRICT:mysiteAdminToken')||'',r=await fetch(API,{method:'POST',cache:'no-store',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({mode:'innovationadmin',action,data,token})}),j=await r.json();if(!r.ok||!j.success)throw new Error(j.message||'ดำเนินการไม่สำเร็จ');return j.data}

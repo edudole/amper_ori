@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const API = 'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+  const API = window.APP_CONFIG.EXEC_URL;
   const state = { items: [], query: '', page: 1 };
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[char]);
 

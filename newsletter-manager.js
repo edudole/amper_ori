@@ -1,6 +1,6 @@
 (() => {
   'use strict';
-  const API='https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+  const API=window.APP_CONFIG.EXEC_URL;
   const state={items:[],query:'',page:1,perPage:5};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
   const validUrl=v=>{try{const u=new URL(v);return /^https?:$/.test(u.protocol)}catch(_){return false}};

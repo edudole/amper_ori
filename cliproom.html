@@ -2,6 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="utf-8">
+  <script src="app-config.js?v=20260917-1"></script>
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
   <meta name="description" content="ระบบ Cliproom อบรมออนไลน์ผ่านวิดีโอ แบบทดสอบ และเกียรติบัตร">
   <title>Cliproom — ระบบอบรมออนไลน์</title>
@@ -21,7 +22,7 @@
   <script>
   (() => {
     'use strict';
-    const MAIN_API_URL = 'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec';
+    const MAIN_API_URL = window.APP_CONFIG.EXEC_URL;
     const status = document.getElementById('cliproomStatus');
     const statusText = document.getElementById('cliproomStatusText');
     const spinner = document.getElementById('cliproomSpinner');

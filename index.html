@@ -3,6 +3,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
+  <script src="app-config.js?v=20260917-1"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="เว็บไซต์ร้านหนังสือสไตล์ภาพประกอบ พร้อมใช้งานบน GitHub Pages" />
   <title>สกร.ระดับอำเภอบ่อเกลือ</title>
@@ -21,7 +22,7 @@
     // 3) homefast เดิมยังทำงานต่อครบทุก section
     (function () {
       var NS = "LP360:DISTRICT:";
-      var API = "https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec";
+      var API = window.APP_CONFIG.EXEC_URL;
       var cacheKey = NS + 'SITE_FAST:homefast-v13-first-image-20260917';
       var heroKey = NS + 'CRITICAL_IMAGE:hero-v1';
       var maxAge = 24 * 60 * 60 * 1000;

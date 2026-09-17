@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const API_URL = 'https://script.google.com/macros/s/AKfycbyGRs8U6Y_90v4vp-b89DbPys6XdK10wNfk6wr9GlOodS56eCmt9mRAQaor06sPXSyw/exec?mode=facebook';
+  const API_URL = window.APP_CONFIG.EXEC_URL + '?mode=facebook';
   const PAGE_SIZE = 4;
   const state = { items: [], filteredItems: [], page: 0 };
 
