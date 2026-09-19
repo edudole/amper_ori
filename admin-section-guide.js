@@ -2,6 +2,7 @@
 const API=window.APP_CONFIG.EXEC_URL;
 const builtins=[
   {id:'studentServicesBox',kind:'builtin',title:'บริการนักศึกษา',visible:true},
+  {id:'readBookTimeBox',kind:'builtin',title:'อ่านหนังสือสะสมเวลา',visible:true},
   {id:'userBox',kind:'builtin',title:'รายการ User',visible:true},
   {id:'learningSourceBox',kind:'builtin',title:'แหล่งเรียนรู้',visible:true},
   {id:'activityBox',kind:'builtin',title:'จดหมายข่าว',visible:true},
@@ -37,7 +38,7 @@ function normalize(items){
   const incoming=Array.isArray(items)?items:[];
   const out=[],seen=new Set();
   incoming.forEach(raw=>{const item=normalizeItem(raw);if(item&&!seen.has(item.id)){seen.add(item.id);out.push(item)}});
-  builtins.forEach(base=>{if(!seen.has(base.id))out.push({...base})});
+  builtins.forEach(base=>{if(seen.has(base.id))return;if(base.id==='readBookTimeBox'){const at=out.findIndex(item=>item.id==='studentServicesBox');if(at>=0)out.splice(at+1,0,{...base});else out.unshift({...base});}else out.push({...base})});
   return out;
 }
 async function getLayout(){
